@@ -1,6 +1,9 @@
-name: Automated API tests using Postman CLI
+name: Run Every 10 Minutes
 
-on: push
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:      # Optional: allows manual triggering
 
 jobs:
   automated-api-tests:
