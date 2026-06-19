@@ -1,9 +1,8 @@
 name: Run Every 10 Minutes
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch:      # Optional: allows manual triggering
+  push:
+  workflow_dispatch:
 
 jobs:
   automated-api-tests:
