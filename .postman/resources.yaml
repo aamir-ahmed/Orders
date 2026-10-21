@@ -1,7 +1,3 @@
-# Use this workspace to collaborate
-workspace:
-  id: b92bbafc-7ce3-45b3-b2b4-a8ada4481fe4
-
 localResources:
   specs:
     - ../Orders Admin API.yaml
