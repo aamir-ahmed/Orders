@@ -1,0 +1,196 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/orders"
+method: POST
+headers:
+  - key: Idempotency-Key
+    value: string
+    disabled: false
+    description: |
+      A unique key (typically a UUID) that the client provides to make a request idempotent.
+      Repeating a request with the same key should not create duplicate resources.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      }
+  - key: X-Correlation-Id
+    value: string
+    disabled: false
+    description: Client-provided correlation ID for request tracing.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      }
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "customerId": "cust_67890",
+      "currency": "USD",
+      "items": [
+        {
+          "sku": "HP-LJ-MFP-M234SDW",
+          "quantity": 1
+        },
+        {
+          "sku": "W1470A",
+          "quantity": 2
+        }
+      ],
+      "shippingAddress": {
+        "line1": "1501 Page Mill Rd",
+        "city": "Palo Alto",
+        "region": "CA",
+        "postalCode": "94304",
+        "country": "US"
+      },
+      "billingAddress": {
+        "line1": "1501 Page Mill Rd",
+        "city": "Palo Alto",
+        "region": "CA",
+        "postalCode": "94304",
+        "country": "US"
+      },
+      "notes": "Partner order submission.",
+      "metadata": {
+        "partnerId": "prt_13579",
+        "channel": "PARTNER",
+        "purchaseOrderNumber": "PO-1000456"
+      }
+    }
+  $type: |-
+    {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3,
+          "example": "USD",
+          "description": "ISO 4217 currency code used for pricing"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "sku",
+              "quantity"
+            ]
+          }
+        },
+        "shippingAddress": {
+          "type": "object",
+          "properties": {
+            "line1": {
+              "type": "string"
+            },
+            "line2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string",
+              "description": "State/Province/Region"
+            },
+            "postalCode": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2,
+              "example": "US",
+              "description": "ISO 3166-1 alpha-2 country code"
+            }
+          },
+          "required": [
+            "line1",
+            "city",
+            "region",
+            "postalCode",
+            "country"
+          ]
+        },
+        "billingAddress": {
+          "type": "object",
+          "properties": {
+            "line1": {
+              "type": "string"
+            },
+            "line2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string",
+              "description": "State/Province/Region"
+            },
+            "postalCode": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2,
+              "example": "US",
+              "description": "ISO 3166-1 alpha-2 country code"
+            }
+          },
+          "required": [
+            "line1",
+            "city",
+            "region",
+            "postalCode",
+            "country"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "customerId",
+        "items",
+        "currency",
+        "shippingAddress"
+      ]
+    }
+settings: {}
+examples: ./.resources/Create an order.resources/examples
+order: 1000

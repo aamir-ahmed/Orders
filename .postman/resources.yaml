@@ -1,0 +1,9 @@
+workspace:
+  id: a771034b-6583-4748-bf58-6a5132307723
+
+localResources:
+  specs:
+    - ../postman/specs/Orders Tracking API.yaml
+resourceNameMappings:
+  specs:
+    - ../postman/specs/Orders Tracking API.yaml: Orders Tracking API.yaml

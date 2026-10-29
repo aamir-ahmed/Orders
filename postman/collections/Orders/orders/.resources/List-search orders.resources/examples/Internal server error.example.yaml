@@ -1,0 +1,107 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/orders?status=CONFIRMED&customerId=string&createdFrom=1983-11-18T10:57:32.682Z&createdTo=1983-11-18T10:57:32.682Z&limit=50&cursor=string"
+  method: GET
+  headers:
+    - key: X-Correlation-Id
+      value: string
+      disabled: false
+      description: Client-provided correlation ID for request tracing.
+    - key: Accept
+      value: application/json
+  queryParams:
+    - key: status
+      value: CONFIRMED
+      disabled: false
+      description: Filter by order status
+    - key: customerId
+      value: string
+      disabled: false
+      description: Filter by customer ID
+    - key: createdFrom
+      value: 1983-11-18T10:57:32.682Z
+      disabled: false
+      description: Filter by creation date (inclusive) in ISO-8601 format
+    - key: createdTo
+      value: 1983-11-18T10:57:32.682Z
+      disabled: false
+      description: Filter by creation date (inclusive) in ISO-8601 format
+    - key: limit
+      value: "50"
+      disabled: false
+      description: Max number of results to return
+    - key: cursor
+      value: string
+      disabled: false
+      description: Opaque pagination cursor
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 500
+  statusText: Internal Server Error
+  headers:
+    Content-Type: application/json
+    X-Correlation-Id: ""
+  body:
+    type: json
+    content: |-
+      {
+        "code": "INVALID_REQUEST",
+        "message": "One or more fields are invalid.",
+        "correlationId": "string",
+        "details": [
+          {
+            "field": "string",
+            "issue": "string"
+          },
+          {
+            "field": "string",
+            "issue": "string"
+          }
+        ]
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "INVALID_REQUEST",
+            "description": "Stable, machine-readable error code"
+          },
+          "message": {
+            "type": "string",
+            "example": "One or more fields are invalid.",
+            "description": "Human-readable error message"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "Correlation ID for troubleshooting"
+          },
+          "details": {
+            "type": "array",
+            "description": "Optional list of validation or domain errors",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "issue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "field",
+                "issue"
+              ]
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+order: 3000

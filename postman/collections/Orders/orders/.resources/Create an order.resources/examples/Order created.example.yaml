@@ -1,0 +1,409 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/orders"
+  method: POST
+  headers:
+    - key: Idempotency-Key
+      value: string
+      disabled: false
+      description: |
+        A unique key (typically a UUID) that the client provides to make a request idempotent.
+        Repeating a request with the same key should not create duplicate resources.
+    - key: X-Correlation-Id
+      value: string
+      disabled: false
+      description: Client-provided correlation ID for request tracing.
+    - key: Content-Type
+      value: application/json
+    - key: Accept
+      value: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "customerId": "cust_67890",
+        "currency": "USD",
+        "items": [
+          {
+            "sku": "HP-LJ-MFP-M234SDW",
+            "quantity": 1
+          },
+          {
+            "sku": "W1470A",
+            "quantity": 2
+          }
+        ],
+        "shippingAddress": {
+          "line1": "1501 Page Mill Rd",
+          "city": "Palo Alto",
+          "region": "CA",
+          "postalCode": "94304",
+          "country": "US"
+        },
+        "billingAddress": {
+          "line1": "1501 Page Mill Rd",
+          "city": "Palo Alto",
+          "region": "CA",
+          "postalCode": "94304",
+          "country": "US"
+        },
+        "notes": "Partner order submission.",
+        "metadata": {
+          "partnerId": "prt_13579",
+          "channel": "PARTNER",
+          "purchaseOrderNumber": "PO-1000456"
+        }
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+    X-Correlation-Id: ""
+  body:
+    type: json
+    content: |-
+      {
+        "id": "ord_12345",
+        "customerId": "cust_67890",
+        "status": "PENDING",
+        "items": [
+          {
+            "sku": "HP-LJ-MFP-M234SDW",
+            "name": "HP LaserJet MFP M234sdw",
+            "quantity": 1,
+            "unitPrice": {
+              "currency": "USD",
+              "amount": 24999
+            },
+            "totalPrice": {
+              "currency": "USD",
+              "amount": 24999
+            }
+          },
+          {
+            "sku": "W1470A",
+            "name": "HP 147A Black Toner Cartridge",
+            "quantity": 2,
+            "unitPrice": {
+              "currency": "USD",
+              "amount": 10999
+            },
+            "totalPrice": {
+              "currency": "USD",
+              "amount": 21998
+            }
+          }
+        ],
+        "shippingAddress": {
+          "line1": "1501 Page Mill Rd",
+          "city": "Palo Alto",
+          "region": "CA",
+          "postalCode": "94304",
+          "country": "US"
+        },
+        "billingAddress": {
+          "line1": "1501 Page Mill Rd",
+          "city": "Palo Alto",
+          "region": "CA",
+          "postalCode": "94304",
+          "country": "US"
+        },
+        "subtotal": {
+          "currency": "USD",
+          "amount": 46997
+        },
+        "tax": {
+          "currency": "USD",
+          "amount": 3759
+        },
+        "shipping": {
+          "currency": "USD",
+          "amount": 1299
+        },
+        "total": {
+          "currency": "USD",
+          "amount": 52055
+        },
+        "createdAt": "2026-03-13T10:00:00Z",
+        "updatedAt": "2026-03-13T10:05:00Z",
+        "metadata": {
+          "partnerId": "prt_13579",
+          "channel": "PARTNER",
+          "purchaseOrderNumber": "PO-1000456"
+        }
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Order identifier"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "ALLOCATED",
+              "SHIPPED",
+              "DELIVERED",
+              "CANCELED"
+            ],
+            "description": "Order lifecycle status"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "unitPrice": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 3,
+                      "example": "USD",
+                      "description": "ISO 4217 currency code"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 1299,
+                      "description": "Amount in minor units (e.g., cents)"
+                    }
+                  },
+                  "required": [
+                    "currency",
+                    "amount"
+                  ]
+                },
+                "totalPrice": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 3,
+                      "example": "USD",
+                      "description": "ISO 4217 currency code"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 1299,
+                      "description": "Amount in minor units (e.g., cents)"
+                    }
+                  },
+                  "required": [
+                    "currency",
+                    "amount"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "description": "Arbitrary key/value metadata"
+                }
+              },
+              "required": [
+                "sku",
+                "name",
+                "quantity",
+                "unitPrice",
+                "totalPrice"
+              ]
+            }
+          },
+          "shippingAddress": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": "string"
+              },
+              "line2": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string",
+                "description": "State/Province/Region"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2,
+                "example": "US",
+                "description": "ISO 3166-1 alpha-2 country code"
+              }
+            },
+            "required": [
+              "line1",
+              "city",
+              "region",
+              "postalCode",
+              "country"
+            ]
+          },
+          "billingAddress": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": "string"
+              },
+              "line2": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string",
+                "description": "State/Province/Region"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2,
+                "example": "US",
+                "description": "ISO 3166-1 alpha-2 country code"
+              }
+            },
+            "required": [
+              "line1",
+              "city",
+              "region",
+              "postalCode",
+              "country"
+            ]
+          },
+          "subtotal": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "USD",
+                "description": "ISO 4217 currency code"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1299,
+                "description": "Amount in minor units (e.g., cents)"
+              }
+            },
+            "required": [
+              "currency",
+              "amount"
+            ]
+          },
+          "tax": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "USD",
+                "description": "ISO 4217 currency code"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1299,
+                "description": "Amount in minor units (e.g., cents)"
+              }
+            },
+            "required": [
+              "currency",
+              "amount"
+            ]
+          },
+          "shipping": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "USD",
+                "description": "ISO 4217 currency code"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1299,
+                "description": "Amount in minor units (e.g., cents)"
+              }
+            },
+            "required": [
+              "currency",
+              "amount"
+            ]
+          },
+          "total": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 3,
+                "example": "USD",
+                "description": "ISO 4217 currency code"
+              },
+              "amount": {
+                "type": "integer",
+                "example": 1299,
+                "description": "Amount in minor units (e.g., cents)"
+              }
+            },
+            "required": [
+              "currency",
+              "amount"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "canceledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "items",
+          "subtotal",
+          "total",
+          "createdAt"
+        ]
+      }
+order: 1000

@@ -1,0 +1,66 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/orders/:orderId/events?limit=50&cursor=string"
+method: GET
+headers:
+  - key: X-Correlation-Id
+    value: string
+    disabled: false
+    description: Client-provided correlation ID for request tracing.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      }
+  - key: Accept
+    value: application/json
+queryParams:
+  - key: limit
+    value: "50"
+    disabled: false
+    description: Max number of results to return
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 200
+          }
+        }
+      }
+  - key: cursor
+    value: string
+    disabled: false
+    description: Opaque pagination cursor
+    $type: string
+pathVariables:
+  - key: orderId
+    value: string
+    disabled: false
+    description: Order identifier
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      }
+body:
+  type: text
+  content: ""
+settings: {}
+examples: ./.resources/Get order events.resources/examples
+order: 1000

@@ -1,0 +1,105 @@
+$kind: http-request
+name: List/search orders
+description: ""
+url: "{{baseUrl}}/orders?status=CONFIRMED&customerId=string&createdFrom=1983-11-18T10:57:32.682Z&createdTo=1983-11-18T10:57:32.682Z&limit=50&cursor=string"
+method: GET
+headers:
+  - key: X-Correlation-Id
+    value: string
+    disabled: false
+    description: Client-provided correlation ID for request tracing.
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      }
+  - key: Accept
+    value: application/json
+queryParams:
+  - key: status
+    value: CONFIRMED
+    disabled: false
+    description: Filter by order status
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Order lifecycle status",
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "ALLOCATED",
+              "SHIPPED",
+              "DELIVERED",
+              "CANCELED"
+            ]
+          }
+        }
+      }
+  - key: customerId
+    value: string
+    disabled: false
+    description: Filter by customer ID
+    $type: string
+  - key: createdFrom
+    value: 1983-11-18T10:57:32.682Z
+    disabled: false
+    description: Filter by creation date (inclusive) in ISO-8601 format
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+  - key: createdTo
+    value: 1983-11-18T10:57:32.682Z
+    disabled: false
+    description: Filter by creation date (inclusive) in ISO-8601 format
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+  - key: limit
+    value: "50"
+    disabled: false
+    description: Max number of results to return
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 200
+          }
+        }
+      }
+  - key: cursor
+    value: string
+    disabled: false
+    description: Opaque pagination cursor
+    $type: string
+body:
+  type: text
+  content: ""
+settings: {}
+examples: ./.resources/List-search orders.resources/examples
+order: 2000

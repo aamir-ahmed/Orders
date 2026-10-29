@@ -1,0 +1,139 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/orders/:orderId/events?limit=50&cursor=string"
+  method: GET
+  headers:
+    - key: X-Correlation-Id
+      value: string
+      disabled: false
+      description: Client-provided correlation ID for request tracing.
+    - key: Accept
+      value: application/json
+  queryParams:
+    - key: limit
+      value: "50"
+      disabled: false
+      description: Max number of results to return
+    - key: cursor
+      value: string
+      disabled: false
+      description: Opaque pagination cursor
+  pathVariables:
+    - key: orderId
+      value: string
+      disabled: false
+      description: Order identifier
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: X-Correlation-Id
+      value: ""
+      disabled: false
+      description: ""
+    - key: X-Next-Cursor
+      value: string
+      disabled: false
+      description: Opaque cursor to fetch the next page (if any)
+      $type: string
+  body:
+    type: json
+    content: |-
+      {
+        "items": [
+          {
+            "id": "evt_0001",
+            "orderId": "ord_12345",
+            "type": "CREATED",
+            "occurredAt": "2026-03-13T10:00:00Z",
+            "actor": "system",
+            "details": {
+              "note": "Order created.",
+              "partnerId": "prt_13579",
+              "channel": "PARTNER",
+              "purchaseOrderNumber": "PO-1000456"
+            }
+          },
+          {
+            "id": "evt_0002",
+            "orderId": "ord_12345",
+            "type": "CONFIRMED",
+            "occurredAt": "2026-03-13T10:01:00Z",
+            "actor": "system",
+            "details": {
+              "note": "Order confirmed."
+            }
+          },
+          {
+            "id": "evt_0003",
+            "orderId": "ord_12345",
+            "type": "CANCELED",
+            "occurredAt": "2026-03-13T10:06:00Z",
+            "actor": "system",
+            "details": {
+              "note": "Order canceled."
+            }
+          }
+        ],
+        "nextCursor": "cursor_next_evt_001"
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "orderId": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "CREATED",
+                    "CONFIRMED",
+                    "ALLOCATED",
+                    "SHIPPED",
+                    "DELIVERED",
+                    "CANCELED"
+                  ]
+                },
+                "occurredAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "actor": {
+                  "type": "string",
+                  "description": "System/user that caused the event"
+                },
+                "details": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "id",
+                "orderId",
+                "type",
+                "occurredAt"
+              ]
+            }
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      }
+order: 1000

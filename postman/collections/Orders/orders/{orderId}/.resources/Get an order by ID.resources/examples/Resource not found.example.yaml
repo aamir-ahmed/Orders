@@ -1,0 +1,77 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/orders/:orderId"
+  method: GET
+  headers:
+    - key: X-Correlation-Id
+      value: string
+      disabled: false
+      description: Client-provided correlation ID for request tracing.
+    - key: Accept
+      value: application/json
+  pathVariables:
+    - key: orderId
+      value: string
+      disabled: false
+      description: Order identifier
+  body:
+    type: text
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+    X-Correlation-Id: ""
+  body:
+    type: json
+    content: |-
+      {
+        "code": "NOT_FOUND",
+        "message": "Order not found.",
+        "correlationId": "corr_abc123"
+      }
+    $type: |-
+      {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "INVALID_REQUEST",
+            "description": "Stable, machine-readable error code"
+          },
+          "message": {
+            "type": "string",
+            "example": "One or more fields are invalid.",
+            "description": "Human-readable error message"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "Correlation ID for troubleshooting"
+          },
+          "details": {
+            "type": "array",
+            "description": "Optional list of validation or domain errors",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "issue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "field",
+                "issue"
+              ]
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+order: 2000
